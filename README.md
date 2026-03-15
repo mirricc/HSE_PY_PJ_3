@@ -138,7 +138,7 @@ docker-compose down
 | GET | `/admin/history/expired` | История истекших |
 | GET | `/admin/popular` | Популярные ссылки |
 
-## 🔑 Примеры использования
+##  Примеры использования
 
 ### Регистрация
 ```bash
@@ -180,7 +180,7 @@ curl -X POST "http://localhost:8000/links/shorten" \
 curl "http://localhost:8000/links/{short_code}/stats"
 ```
 
-## 🗄️ База данных
+##  База данных
 
 Используется **SQLite** для хранения:
 - Пользователи
@@ -188,7 +188,7 @@ curl "http://localhost:8000/links/{short_code}/stats"
 - Проекты (группировка)
 - История истекших ссылок
 
-## 📦 Кэширование
+##  Кэширование
 
 **Redis** + **fastapi-cache2** используется для:
 - Кэширования статистики ссылок (`GET /links/{short_code}/stats`)
@@ -196,13 +196,13 @@ curl "http://localhost:8000/links/{short_code}/stats"
 
 Кэш ускоряет ответы API и снижает нагрузку на БД.
 
-## 📝 Документация
+##  Документация
 
 После запуска сервера доступна интерактивная документация:
 - Swagger UI: http://localhost:8000/docs
 - ReDoc: http://localhost:8000/redoc
 
-## 🐳 Docker
+##  Docker
 
 ### Быстрый старт с Docker
 
