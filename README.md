@@ -3,6 +3,10 @@
 Сервис для сокращения ссылок с аналитикой и управлением.
 ##  Возможности
 ![alt text](https://github.com/mirricc/smth/blob/6fa36635608d4e466368c552479ebed0b30baf41/1.jpg)
+![alt text](https://github.com/mirricc/smth/blob/6fa36635608d4e466368c552479ebed0b30baf41/2.jpg)
+![alt text](https://github.com/mirricc/smth/blob/6fa36635608d4e466368c552479ebed0b30baf41/3.jpg)
+![alt text](https://github.com/mirricc/smth/blob/6fa36635608d4e466368c552479ebed0b30baf41/4.jpg)
+![alt text](https://github.com/mirricc/smth/blob/6fa36635608d4e466368c552479ebed0b30baf41/5.jpg)
 ### Обязательные функции:
 -  `POST /links/shorten` – создание короткой ссылки
 -  `GET /links/{short_code}` – перенаправление на оригинальный URL
