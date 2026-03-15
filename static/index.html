@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>URL Shortener - Сервис сокращения ссылок</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <svg class="logo-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path>
+                        <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path>
+                    </svg>
+                    <span>URL Shortener</span>
+                </div>
+                <nav class="nav" id="navMenu">
+                    <a href="#shorten" class="nav-link">Создать ссылку</a>
+                    <a href="#my-links" class="nav-link">Мои ссылки</a>
+                    <a href="#stats" class="nav-link">Статистика</a>
+                    <a href="#projects" class="nav-link">Проекты</a>
+                </nav>
+                <div class="auth-buttons" id="authButtons">
+                    <button class="btn btn-outline" onclick="showLoginModal()">Войти</button>
+                    <button class="btn btn-primary" onclick="showRegisterModal()">Регистрация</button>
+                </div>
+                <div class="user-menu" id="userMenu" style="display: none;">
+                    <span class="username" id="username"></span>
+                    <button class="btn btn-outline btn-sm" onclick="logout()">Выйти</button>
+                </div>
+                <button class="mobile-menu-btn" onclick="toggleMobileMenu()">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <div class="hero-content">
+                <h1>Сокращайте ссылки<br><span>быстро и удобно</span></h1>
+                <p>Создавайте короткие ссылки, отслеживайте статистику переходов и управляйте своими URL в одном месте</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Main Content -->
+    <main class="main">
+        <div class="container">
+            <!-- Shorten Link Section -->
+            <section class="section" id="shorten">
+                <div class="section-header">
+                    <h2>Создать короткую ссылку</h2>
+                    <p>Введите длинную ссылку и получите короткий URL</p>
+                </div>
+                
+                <form class="shorten-form" id="shortenForm">
+                    <div class="form-group">
+                        <label for="originalUrl">Длинная ссылка</label>
+                        <input type="url" id="originalUrl" placeholder="https://example.com/very/long/url/here" required>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="customAlias">Кастомный алиас (необязательно)</label>
+                            <input type="text" id="customAlias" placeholder="my-link">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="expiresAt">Срок действия (необязательно)</label>
+                            <input type="datetime-local" id="expiresAt">
+                        </div>
+                    </div>
+                    
+                    <div class="form-group" id="projectGroup" style="display: none;">
+                        <label for="projectSelect">Проект</label>
+                        <select id="projectSelect">
+                            <option value="">Без проекта</option>
+                        </select>
+                    </div>
+                    
+                    <button type="submit" class="btn btn-primary btn-lg">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M12 5v14M5 12h14"/>
+                        </svg>
+                        Сократить ссылку
+                    </button>
+                </form>
+                
+                <!-- Result -->
+                <div class="result-card" id="resultCard" style="display: none;">
+                    <div class="result-header">
+                        <h3>Ваша короткая ссылка готова!</h3>
+                        <button class="btn-icon" onclick="closeResult()">×</button>
+                    </div>
+                    <div class="result-content">
+                        <div class="short-url">
+                            <input type="text" id="shortUrlInput" readonly>
+                            <button class="btn btn-primary" onclick="copyShortUrl()">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                                    <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                                </svg>
+                                Копировать
+                            </button>
+                        </div>
+                        <p class="original-url" id="resultOriginalUrl"></p>
+                        <div class="result-actions">
+                            <button class="btn btn-outline" onclick="showStats()">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <line x1="18" y1="20" x2="18" y2="10"></line>
+                                    <line x1="12" y1="20" x2="12" y2="4"></line>
+                                    <line x1="6" y1="20" x2="6" y2="14"></line>
+                                </svg>
+                                Статистика
+                            </button>
+                            <button class="btn btn-outline" onclick="openShortLink()">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+                                    <polyline points="15 3 21 3 21 9"></polyline>
+                                    <line x1="10" y1="14" x2="21" y2="3"></line>
+                                </svg>
+                                Открыть
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- My Links Section -->
+            <section class="section" id="my-links">
+                <div class="section-header">
+                    <h2>Мои ссылки</h2>
+                    <p>Управляйте всеми вашими короткими ссылками</p>
+                </div>
+                
+                <div class="links-filter">
+                    <input type="text" id="searchInput" placeholder="Поиск по URL..." class="search-input">
+                    <select id="sortBy" class="sort-select">
+                        <option value="created_at">По дате создания</option>
+                        <option value="access_count">По популярности</option>
+                    </select>
+                </div>
+                
+                <div class="links-list" id="linksList">
+                    <div class="empty-state" id="emptyLinks">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path>
+                            <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path>
+                        </svg>
+                        <p>У вас пока нет ссылок</p>
+                        <span>Создайте первую ссылку выше</span>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Stats Section -->
+            <section class="section" id="stats">
+                <div class="section-header">
+                    <h2>Статистика</h2>
+                    <p>Подробная информация о переходах</p>
+                </div>
+                
+                <div class="stats-search">
+                    <input type="text" id="statsShortCode" placeholder="Введите short код ссылки">
+                    <button class="btn btn-primary" onclick="loadStats()">Показать</button>
+                </div>
+                
+                <div class="stats-card" id="statsCard" style="display: none;">
+                    <div class="stats-grid">
+                        <div class="stat-item">
+                            <div class="stat-value" id="statAccessCount">0</div>
+                            <div class="stat-label">Переходов</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-value" id="statCreatedAt">-</div>
+                            <div class="stat-label">Создана</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-value" id="statLastAccess">-</div>
+                            <div class="stat-label">Последний переход</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-value" id="statExpires">-</div>
+                            <div class="stat-label">Истекает</div>
+                        </div>
+                    </div>
+                    <div class="stats-original">
+                        <strong>Оригинальный URL:</strong>
+                        <a href="#" id="statsOriginalUrl" target="_blank"></a>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Projects Section -->
+            <section class="section" id="projects">
+                <div class="section-header">
+                    <h2>Проекты</h2>
+                    <p>Группируйте ссылки по проектам</p>
+                </div>
+                
+                <div class="projects-header">
+                    <button class="btn btn-primary" onclick="showProjectModal()">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M12 5v14M5 12h14"/>
+                        </svg>
+                        Новый проект
+                    </button>
+                </div>
+                
+                <div class="projects-list" id="projectsList">
+                    <div class="empty-state">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path>
+                        </svg>
+                        <p>Нет проектов</p>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2026 URL Shortener. Все права защищены.</p>
+        </div>
+    </footer>
+
+    <!-- Login Modal -->
+    <div class="modal" id="loginModal">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeModal('loginModal')">×</button>
+            <h2>Вход</h2>
+            <form id="loginForm">
+                <div class="form-group">
+                    <label for="loginUsername">Имя пользователя</label>
+                    <input type="text" id="loginUsername" required>
+                </div>
+                <div class="form-group">
+                    <label for="loginPassword">Пароль</label>
+                    <input type="password" id="loginPassword" required>
+                </div>
+                <button type="submit" class="btn btn-primary btn-block">Войти</button>
+            </form>
+            <p class="modal-footer">Нет аккаунта? <a href="#" onclick="switchModal('loginModal', 'registerModal')">Зарегистрироваться</a></p>
+        </div>
+    </div>
+
+    <!-- Register Modal -->
+    <div class="modal" id="registerModal">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeModal('registerModal')">×</button>
+            <h2>Регистрация</h2>
+            <form id="registerForm">
+                <div class="form-group">
+                    <label for="registerUsername">Имя пользователя</label>
+                    <input type="text" id="registerUsername" required>
+                </div>
+                <div class="form-group">
+                    <label for="registerEmail">Email</label>
+                    <input type="email" id="registerEmail" required>
+                </div>
+                <div class="form-group">
+                    <label for="registerPassword">Пароль</label>
+                    <input type="password" id="registerPassword" required>
+                </div>
+                <button type="submit" class="btn btn-primary btn-block">Зарегистрироваться</button>
+            </form>
+            <p class="modal-footer">Есть аккаунт? <a href="#" onclick="switchModal('registerModal', 'loginModal')">Войти</a></p>
+        </div>
+    </div>
+
+    <!-- Project Modal -->
+    <div class="modal" id="projectModal">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeModal('projectModal')">×</button>
+            <h2>Новый проект</h2>
+            <form id="projectForm">
+                <div class="form-group">
+                    <label for="projectName">Название</label>
+                    <input type="text" id="projectName" required>
+                </div>
+                <div class="form-group">
+                    <label for="projectDescription">Описание</label>
+                    <textarea id="projectDescription" rows="3"></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary btn-block">Создать</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div class="toast" id="toast"></div>
+
+    <script src="/static/js/app.js"></script>
+</body>
+</html>
