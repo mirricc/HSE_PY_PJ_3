@@ -1,7 +1,7 @@
 # URL Shortener API
 
 Сервис для сокращения ссылок с аналитикой и управлением.
-
+blob:https://web.telegram.org/56396398-5eb6-4e2a-bfbd-dc1c94d1552f
 ##  Возможности
 
 ### Обязательные функции:
@@ -104,7 +104,7 @@ docker-compose down
 - `app_data` — база данных SQLite
 - `redis_data` — данные Redis
 
-## 📖 API Endpoints
+##  API Endpoints
 
 ### Auth
 | Метод | Endpoint | Описание |
